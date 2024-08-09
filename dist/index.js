@@ -37,13 +37,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose = __importStar(require("mongoose"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const passport_1 = __importDefault(require("./middlewares/passport"));
 const error_middleware_1 = __importDefault(require("./middlewares/error-middleware"));
+const auth_middleware_1 = __importDefault(require("./middlewares/auth-middleware"));
+const auth_router_1 = __importDefault(require("./router/auth-router"));
 const supplier_router_1 = __importDefault(require("./router/supplier-router"));
+const publisher_router_1 = __importDefault(require("./router/publisher-router"));
+const scenario_router_1 = __importDefault(require("./router/scenario-router"));
 require("dotenv").config();
 const PORT = process.env.PORT || "5000";
 const app = (0, express_1.default)();
+app.use(body_parser_1.default.urlencoded({ extended: false }));
+app.use(body_parser_1.default.json());
+console.log(passport_1.default);
+app.use(passport_1.default.initialize()); // Make sure this is called before routes
+app.use(express_1.default.json());
 app.use(error_middleware_1.default);
-app.use("/api/supplier", supplier_router_1.default);
+app.use("/api/auth", auth_router_1.default);
+app.use("/api/supplier", auth_middleware_1.default, supplier_router_1.default);
+app.use("/api/publisher", auth_middleware_1.default, publisher_router_1.default);
+app.use("/api/scenario", auth_middleware_1.default, scenario_router_1.default);
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose.connect(process.env.DB_URL, {

@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from "express";
 import SupplierService from "../services/supplier-service";
-import {ISupplier} from "../shared/supplier-interfaces";
+import {ISupplier} from "../shared/interfaces/supplier-interfaces";
 
 class ToyTypeController {
     async create(request: Request, response: Response, next: NextFunction) {

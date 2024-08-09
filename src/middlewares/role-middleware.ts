@@ -1,29 +1,28 @@
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import ApiError from "../exeptions/api-error";
+import { Request, Response, NextFunction } from 'express';
+import passport from 'passport';
+import ApiError from '../exeptions/api-error';
+
+interface IUserRole {
+    role: string
+}
 
 function roleMiddleware(roles: string[]) {
     return (request: Request, response: Response, next: NextFunction) => {
-        const authHeader = request.headers.authorization;
+        passport.authenticate('jwt', { session: false }, (error: Error | null, user: IUserRole | false) => {
+            if (error) {
+                return next(error);
+            }
+            if (!user) {
+                return next(ApiError.UnauthorizedError());
+            }
 
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return next(ApiError.UnauthorizedError());
-        }
-
-        const token = authHeader.split(" ")[1];
-
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as jwt.JwtPayload;
-            const userRole = decoded.role;
-
-            if (!roles.includes(userRole)) {
+            if (!roles.includes(user.role)) {
                 return next(ApiError.ForbiddenError());
             }
 
-            return next();
-        } catch (error) {
-            return next(ApiError.UnauthorizedError());
-        }
+            request.user = user;
+            next();
+        })(request, response, next);
     };
 }
 

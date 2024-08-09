@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import {ISupplier} from "../shared/supplier-interfaces";
+import {ISupplier} from "../shared/interfaces/supplier-interfaces";
 import SupplierModel from "../models/supplier-model";
 import ApiError from "../exeptions/api-error";
 

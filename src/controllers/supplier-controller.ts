@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from "express";
 import SupplierService from "../services/supplier-service";
-import {ISupplier} from "../shared/supplier-interfaces";
+import {ISupplier} from "../shared/interfaces/supplier-interfaces";
 
 class SupplierController {
     async create(request: Request, response: Response, next: NextFunction) {
@@ -39,14 +39,14 @@ class SupplierController {
 
     async update(request: Request, response: Response, next: NextFunction) {
         try {
-            const supplierupdated: ISupplier = {
+            const supplierUpdated: ISupplier = {
                 name: request.body.name,
                 email: request.body.email,
                 password: request.body.password,
                 phone: request.body.phone
             }
 
-            const supplierSave = await SupplierService.update(request.params.id, supplierupdated);
+            const supplierSave = await SupplierService.update(request.params.id, supplierUpdated);
             response.status(200).json(supplierSave);
         } catch (error) {
             next(error);

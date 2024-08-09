@@ -2,14 +2,18 @@ import express, {Express} from "express";
 import {ConnectOptions} from "mongodb";
 import * as mongoose from "mongoose";
 import passport from "passport";
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import {ExtractJwt, Strategy as JwtStrategy} from "passport-jwt";
 import bodyParser from "body-parser";
+import path from "path";
 
 import errorMiddleware from "./middlewares/error-middleware";
-import SupplierRouter from "./router/supplier-router";
-import UserRouter from "./router/user-router";
-import UserModel from "./models/user-model";
 import authMiddleware from "./middlewares/auth-middleware";
+
+import AuthRouter from "./router/auth-router";
+import SupplierRouter from "./router/supplier-router";
+import PublisherRouter from "./router/publisher-router";
+import ScenarioRouter from "./router/scenario-router";
+import AuthModel from "./models/auth-model";
 
 require("dotenv").config();
 
@@ -18,10 +22,8 @@ const app: Express = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "uploads")));
 app.use(passport.initialize());
-
-app.use(express.json());
-app.use(errorMiddleware);
 
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -30,20 +32,23 @@ const jwtOptions = {
 
 passport.use(new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
     try {
-        const user = await UserModel.findById(jwtPayload.sub);
-        if (user) {
-            done(null, user);
-        } else {
-            done(null, false);
+        const user = await AuthModel.findById(jwtPayload.id);
+        if (!user) {
+            return done(null, false);
         }
+        done(null, user);
     } catch (error) {
         done(error, false);
     }
 }));
 
-app.use("/api/auth", UserRouter);
-app.use("/api/supplier", authMiddleware, SupplierRouter);
+app.use(express.json());
+app.use(errorMiddleware);
 
+app.use("/api/auth", AuthRouter);
+app.use("/api/supplier", authMiddleware, SupplierRouter);
+app.use("/api/publisher", authMiddleware, PublisherRouter);
+app.use("/api/scenario", authMiddleware, ScenarioRouter);
 
 const startServer = async (): Promise<void> => {
     try {

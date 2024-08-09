@@ -18,10 +18,24 @@ class SupplierController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const supplier = {
-                    name: request.body.name
+                    name: request.body.name,
+                    email: request.body.email,
+                    password: request.body.password,
+                    phone: request.body.phone
                 };
                 const supplierSave = yield supplier_service_1.default.create(supplier);
                 response.status(201).json(supplierSave);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    getAll(request, response, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const suppliers = yield supplier_service_1.default.getAll();
+                response.status(200).json(suppliers);
             }
             catch (error) {
                 next(error);
@@ -42,11 +56,14 @@ class SupplierController {
     update(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const updated = {
-                    name: request.body.name
+                const supplierUpdated = {
+                    name: request.body.name,
+                    email: request.body.email,
+                    password: request.body.password,
+                    phone: request.body.phone
                 };
-                const supplierSave = yield supplier_service_1.default.create(updated);
-                response.status(201).json(supplierSave);
+                const supplierSave = yield supplier_service_1.default.update(request.params.id, supplierUpdated);
+                response.status(200).json(supplierSave);
             }
             catch (error) {
                 next(error);

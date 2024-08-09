@@ -1,18 +1,18 @@
-import {Schema, model} from "mongoose";
+import { Schema, model } from 'mongoose';
 
-const ToyTypeModel = new Schema({
+const ToyTypeSchema = new Schema({
     supplier_id: {
-        ref: "Supplier",
+        ref: 'Supplier',
         type: Schema.Types.ObjectId,
         required: true
     },
     personage_obj_state_id: {
-        ref: "Personage_object_state",
+        ref: 'Personage_object_state',
         type: Schema.Types.ObjectId,
         required: true
     },
     default_scenario_id: {
-        ref: "Scenario",
+        ref: 'Scenario',
         type: Schema.Types.ObjectId,
         required: true
     },
@@ -29,4 +29,4 @@ const ToyTypeModel = new Schema({
     }
 });
 
-export default model("Toy_type", ToyTypeModel);
+export default model('ToyType', ToyTypeSchema);
