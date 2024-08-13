@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
-import ApiError from '../exeptions/api-error';
+import ApiError from '../exceptions/api-error';
 
 interface IUserRole {
     role: string

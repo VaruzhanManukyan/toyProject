@@ -1,7 +1,7 @@
 import argon2 from "argon2";
 import {ISupplier} from "../shared/interfaces/supplier-interfaces";
 import SupplierModel from "../models/supplier-model";
-import ApiError from "../exeptions/api-error";
+import ApiError from "../exceptions/api-error";
 
 class SupplierService {
     async create(supplier: ISupplier) {

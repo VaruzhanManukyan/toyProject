@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import ApiError from "../exeptions/api-error";
+import ApiError from "../exceptions/api-error";
 import PublisherModel from "../models/publisher-model";
 import {IPublisher} from "../shared/interfaces/publisher-interfaces";
 

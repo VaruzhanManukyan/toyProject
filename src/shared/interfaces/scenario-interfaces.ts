@@ -1,7 +1,5 @@
-export interface IPublisher {
-    scenario_ids: string[],
+export interface IScenario {
+    audio_file_ids: string[],
+    personage_obj_state_ids: string[],
     name: string;
-    email: string;
-    password: string;
-    phone: number;
 }

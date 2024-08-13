@@ -29,4 +29,4 @@ const ToyTypeSchema = new Schema({
     }
 });
 
-export default model('ToyType', ToyTypeSchema);
+export default model('Toy_type', ToyTypeSchema);

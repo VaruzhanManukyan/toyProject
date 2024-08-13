@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express";
 import userService from "../services/auth-service";
 import {Roles} from "../shared/enums/role-enum";
-import ApiError from "../exeptions/api-error";
+import ApiError from "../exceptions/api-error";
 
 class AuthController {
     async registration(request: Request, response: Response, next: NextFunction) {

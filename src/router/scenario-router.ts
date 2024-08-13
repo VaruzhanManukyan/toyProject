@@ -1,11 +1,14 @@
 import {Router} from 'express';
-import multer from "../config/multer-audio-config";
 import ScenarioController from "../controllers/scenario-controller";
-import roleMiddleware from "../middlewares/role-middleware";
-import {Roles} from "../shared/enums/role-enum";
+import {multerUploads} from "../config/multer-audio-config";
 
 const router: Router = Router();
 
-router.post("/:publisherId/create", roleMiddleware([Roles.SUPER_ADMIN]), multer.array('audio_files'), ScenarioController.create);
+router.post("/:publisherId/create", multerUploads, ScenarioController.create);
+router.post("/read", ScenarioController.getAll);
+router.post("/read/:id", ScenarioController.getById);
+router.post("/update/:id", multerUploads, ScenarioController.update);
+router.post("/delete/:id", ScenarioController.remove);
+router.post("/get_media_file_ids", ScenarioController.getMediaFileIds);
 
 export default router;

@@ -10,7 +10,7 @@ const fileFilter = (request: Express.Request, file: Express.Multer.File, callbac
 };
 
 const storage = multer.diskStorage({
-    destination(req, file, callback) {
+    destination(request, file, callback) {
         callback(null, "uploads-audio/");
     },
     filename(request, file, callback) {
@@ -20,7 +20,8 @@ const storage = multer.diskStorage({
 });
 
 const limits = {
-    fileSize: 1024 * 1024 * 1024
+    fileSize: 1024 * 1024 * 1024, // 1 GB
 };
 
-export default multer({ storage, fileFilter, limits });
+export const multerUploads = multer({ storage, fileFilter, limits }).array("audio_files");
+export const multerUpload = multer({ storage, fileFilter, limits }).single("audio_file");
